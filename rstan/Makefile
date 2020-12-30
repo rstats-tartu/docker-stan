@@ -1,5 +1,5 @@
 latest:
-	docker build -t jrnold/css564 .
+	docker build -t rstatstartu/rstanverse:latest .
 
 push:
-	docker push jrnold/csss564:latest
+	docker push rstatstartu/rstanverse:latest

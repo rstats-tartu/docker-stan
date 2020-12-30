@@ -18,4 +18,4 @@ See the [rocker](https://github.com/rocker-org/rocker) site for more information
 
 | Docker Container Source on GitHub             | Docker Hub Build Status and URL
 | :---------------------------------------      | :-----------------------------------------
-| rstan        | [good](https://registry.hub.docker.com/u/jrnold/rstan/)
+| rstanverse        | [good](https://registry.hub.docker.com/u/rstatstartu/rstanverse/)
