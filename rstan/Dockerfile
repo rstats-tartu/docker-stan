@@ -48,17 +48,42 @@ RUN install2.r --error \
     abind \
     rlang \
     tibble
+
 RUN install2.r --error \
     --deps TRUE \
     --skipinstalled \
     --repos "https://mc-stan.org/r-packages/" \
     cmdstanr
+    
 RUN install2.r --error \
     --deps TRUE \
     --skipinstalled \
     --repos "https://cloud.r-project.org/" \
     rstan \
     brms \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+    jags \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/
+
+RUN install2.r --error \
+    --deps TRUE \
+    --skipinstalled \
+    --repos "https://cloud.r-project.org/" \
+    gt \
+    extrafont \
+    cowplot \
+    patchwork \
+    viridis \
+    here \
+    rticles \
+    tidybayes \
+    here \
+    glue \
+    sparkline \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
 # Config for rstudio user
