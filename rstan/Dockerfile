@@ -52,7 +52,7 @@ RUN install2.r --error \
 RUN install2.r --error \
     --deps TRUE \
     --skipinstalled \
-    --repos "https://mc-stan.org/r-packages/" \
+    --repos "https://mc-stan.org/r-packages/" --repos "https://cloud.r-project.org/" \
     cmdstanr
     
 RUN install2.r --error \
@@ -66,13 +66,14 @@ RUN install2.r --error \
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
     jags \
+    tk \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/
 
 RUN install2.r --error \
     --deps TRUE \
     --skipinstalled \
-    --repos "https://cloud.r-project.org/" \
+    --repos "https://cran.r-project.org/" \
     gt \
     extrafont \
     cowplot \
@@ -84,6 +85,7 @@ RUN install2.r --error \
     here \
     glue \
     sparkline \
+    networkD3 \
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
 RUN apt-get update \
