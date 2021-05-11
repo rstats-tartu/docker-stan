@@ -96,29 +96,20 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/
 
 ## Use tinytex for LaTeX installation
-RUN install2.r --error tinytex \
-  ## Admin-based install of TinyTeX:
-  && wget -qO- \
-    "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | \
-    sh -s - --admin --no-path \
-  && mv ~/.TinyTeX /opt/TinyTeX \
-  && if /opt/TinyTeX/bin/*/tex -v | grep -q 'TeX Live 2018'; then \
-      ## Patch the Perl modules in the frozen TeX Live 2018 snapshot with the newer
-      ## version available for the installer in tlnet/tlpkg/TeXLive, to include the
-      ## fix described in https://github.com/yihui/tinytex/issues/77#issuecomment-466584510
-      ## as discussed in https://www.preining.info/blog/2019/09/tex-services-at-texlive-info/#comments
-      wget -P /tmp/ ${CTAN_REPO}/install-tl-unx.tar.gz \
-      && tar -xzf /tmp/install-tl-unx.tar.gz -C /tmp/ \
-      && cp -Tr /tmp/install-tl-*/tlpkg/TeXLive /opt/TinyTeX/tlpkg/TeXLive \
-      && rm -r /tmp/install-tl-*; \
-    fi \
-  && /opt/TinyTeX/bin/*/tlmgr path add \
-  && tlmgr install ae inconsolata listings metafont mfware parskip pdfcrop tex \
+RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
+  && dpkg -i texlive-local.deb \
+  && rm texlive-local.deb
+
+ENV CTAN_REPO=http://www.texlive.info/tlnet-archive/2021/02/14/tlnet
+ENV PATH=/usr/local/texlive/bin/x86_64-linux:$PATH
+
+RUN /rocker_scripts/install_texlive.sh
+
+RUN install2.r --error --skipinstalled --repos "https://cloud.r-project.org/" tinytex
+
+RUN tlmgr install ae inconsolata listings metafont mfware parskip pdfcrop tex \
   && tlmgr path add \
-  && Rscript -e "tinytex::r_texmf()" \
-  && chown -R root:staff /opt/TinyTeX \
-  && chmod -R g+w /opt/TinyTeX \
-  && chmod -R g+wx /opt/TinyTeX/bin
+  && Rscript -e "tinytex::r_texmf()"
 
 RUN tlmgr install caption psnfss fancyhdr units microtype lipsum texlive-scripts ec
 
