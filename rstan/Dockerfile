@@ -116,10 +116,15 @@ RUN tlmgr install caption psnfss fancyhdr units microtype lipsum texlive-scripts
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \ 
     pandoc-citeproc \
+    ghostscript \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/
 
 RUN mktexpk --mfmode / --bdpi 600 --mag 1+0/600 --dpi 600 ectt1000
+
+RUN tlmgr install amsmath iftex kvoptions ltxcmds kvsetkeys etoolbox hyperref pdftexcmds infwarerr geometry grffile epstopdf-pkg
+
+RUN tlmgr install collection-fontsrecommended booktabs
 
 # Config for rstudio user
 RUN mkdir -p $HOME/.R/ \
